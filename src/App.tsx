@@ -3,15 +3,13 @@ import io from 'socket.io-client';
 import {
   Box,
   Button,
-  Container,
+  Container, 
   Grid,
   Paper,
-  Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import axios from "axios";
-
 
 type RegisterType = {
   id_venta: number;
@@ -32,7 +30,6 @@ export const App: React.FC<{}> = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     try {
       const {
         id_venta,
@@ -40,16 +37,13 @@ export const App: React.FC<{}> = () => {
         precio
       } = registerData;
       console.log(id_venta);
-      
-      const response = await axios.post("https://hexagonal-1.onrender.com/ventas", {
+      const response = await axios.post("https://api-multi-principal.onrender.com/ventas", {
         id_venta,
         contenido,
         precio
       });
-
       if (response) {
         console.log("Registro exitoso");
-
         setRegisterData({
           id_venta: 0,
           contenido: " ",
@@ -58,90 +52,84 @@ export const App: React.FC<{}> = () => {
       } else {
         console.error("Error al registrar");
       }
-    } catch (error) {
+    } catch (error) { 
       console.error("Error:", error);
     }
   };
 
   useEffect(() => {
-    const socket = io("https://websocketserver-utr2.onrender.com");
+    const socket = io("https://websocket-mqxb.onrender.com");
     socket.on("newClient", (message) => { 
       alert("Ciclo concluido" + message);
     });
-  
   }, []);
-  
-  
 
   return (
     <Container
-      sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+      sx={{ 
+        display: "flex", 
+        alignItems: "center", 
+        justifyContent: "center",
+        backgroundColor: '#f0f0f0', // Changed background color
+        minHeight: "100vh"
+      }}
     >
-      <Container maxWidth="xl">
+      <Container maxWidth="sm"> {/* Reduced container width */}
         <Grid
           container
           direction="column"
           alignItems="center"
           justifyContent="center"
-          sx={{ minHeight: "100vh"}}
         >
           <Grid item>
-            <Paper sx={{ padding: "1.2em", borderRadius: "15px" }}>
-              <Stack spacing={2} direction="row" alignItems="center">
-                <Typography
-                  variant="h5"
-                  justifyContent="center"
-                  sx={{ mt: 1, mb: 1 }}
-                >
-                  $ Ventas $
-                </Typography>
-              </Stack>
-
+            <Paper sx={{ padding: "1.2em" }}> {/* Removed border radius */}
+              <Typography
+                variant="h5"
+                sx={{ mb: 2 }}
+              >
+                Ventas
+              </Typography>
               <Box component="form" onSubmit={handleSubmit}>
                 <TextField
                   name="id_venta"
                   margin="normal"
                   fullWidth
-                  label="Ingresa el id de la venta"
-                  sx={{ mt: 2, mb: 1.5 }}
+                  label="Id de la venta"
+                  sx={{ mb: 1.5 }}
                   required
                   type="number"
                   onChange={dataRegister}
                   value={registerData.id_venta}
                 />
-            
                 <TextField
                   name="contenido"
                   margin="normal"
                   fullWidth
-                  label="Ingresa el contenido de la venta"
-                  sx={{ mt: 2, mb: 1.5 }}
+                  label="Contenido de la venta"
+                  sx={{ mb: 1.5 }}
                   required
                   onChange={dataRegister}
                   value={registerData.contenido}
                 />
-
-<TextField
+                <TextField
                   name="precio"
                   margin="normal"
                   fullWidth
-                  label="Ingresa el precio"
-                  sx={{ mt: 2, mb: 1.5 }}
+                  label="Ingrese el precio"
+                  sx={{ mb: 1.5 }}
                   required
                   type="number"
                   onChange={dataRegister}
                   value={registerData.precio}
                 />
-                <Stack spacing={2} direction="row" justifyContent="center">
-                  <Button
-                    variant="contained"
-                    type="submit"
-                    fullWidth
-                    sx={{ mt: 3, mb: 3 }}
-                  >
-                    Registrar
-                  </Button>
-                </Stack>
+                <Button
+                  variant="contained"
+                  type="submit"
+                  fullWidth
+                  sx={{ bgcolor: '#1976d2', color: 'white' }} // Changed button color
+                >
+                  Enviar
+                </Button>
               </Box>
             </Paper>
           </Grid>
